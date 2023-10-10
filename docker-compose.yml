@@ -4,7 +4,7 @@ services:
       dockerfile: src/Pb.ApiGateway/Dockerfile
       context: .
     ports:
-      - 5000:443
+      - 5000:80
     depends_on:
       - search
       - profile
@@ -16,17 +16,17 @@ services:
       - geo
       - rate
   profile:
-    #image: ghcr.io/microservices-benchmarking-11-kiop-2023/csharp-profile:latest
+    image: ghcr.io/microservices-benchmarking-11-kiop-2023/csharp-profile-rest:latest
     build:
       dockerfile: src/Pb.Profile.Service/Dockerfile
       context: .
   geo:
-    #image: ghcr.io/microservices-benchmarking-11-kiop-2023/csharp-geo:latest
+    image: ghcr.io/microservices-benchmarking-11-kiop-2023/csharp-geo-rest:latest
     build:
       dockerfile: src/Pb.Geo.Service/Dockerfile
       context: .
   rate:
-    #image: ghcr.io/microservices-benchmarking-11-kiop-2023/csharp-rate:latest
+    image: ghcr.io/microservices-benchmarking-11-kiop-2023/csharp-rate-rest:latest
     build:
       dockerfile: src/Pb.Rate.Service/Dockerfile
       context: .

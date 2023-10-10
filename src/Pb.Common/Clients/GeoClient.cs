@@ -24,7 +24,7 @@ public class GeoClient : IGeoClient
         var jsonPayload = JsonConvert.SerializeObject(request);
 
         var httpContent = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync("nearbyhotels", httpContent);
+        var response = await _httpClient.PostAsync($"{_httpClient.BaseAddress}geo/nearby", httpContent);
 
         response.EnsureSuccessStatusCode();
 

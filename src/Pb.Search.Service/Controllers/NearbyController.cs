@@ -15,8 +15,7 @@ public class NearbyController : Controller
         _searchService = searchService;
     }
     
-    [HttpPost]
-    [Route("nearby")]
+    [HttpPost("search/nearby")]
     public async Task<SearchResult?> Nearby([FromBody] NearbyRequest nearbyRequest)
     {
         return await _searchService.Nearby(nearbyRequest);

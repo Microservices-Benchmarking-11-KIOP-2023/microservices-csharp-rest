@@ -5,7 +5,7 @@ namespace Pb.Geo.Service.Services;
 
 public interface IGeoService
 {
-    public Task<GeoResult> Nearby(GeoRequest request);
+    public GeoResult Nearby(GeoRequest request);
 }
 public class GeoService : IGeoService
 {
@@ -22,7 +22,7 @@ public class GeoService : IGeoService
         _points = pointLoader.Points;
     }
 
-    public Task<GeoResult> Nearby(GeoRequest request)
+    public GeoResult Nearby(GeoRequest request)
     {
         var center = new Point
         {
@@ -32,10 +32,10 @@ public class GeoService : IGeoService
         
         var kNearestNeighbours = GetNeighbors(center, _points);
 
-        return Task.FromResult(new GeoResult()
+        return new GeoResult()
         {
             HotelIds = kNearestNeighbours.Select(x => x.HotelId)
-        });
+        };
     }
     
     //TODO: Validate if returns proper values.

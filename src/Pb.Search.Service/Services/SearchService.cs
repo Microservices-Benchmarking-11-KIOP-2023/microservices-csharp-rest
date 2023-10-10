@@ -1,11 +1,13 @@
 using Pb.Common.Clients;
 using Pb.Common.Models;
+
 namespace Pb.Search.Service.Services;
 
 public interface ISearchService
 {
-    public Task<SearchResult> Nearby(NearbyRequest request);
+    public Task<SearchResult?> Nearby(NearbyRequest request);
 }
+
 public class SearchService : ISearchService
 {
     private readonly ILogger<SearchService> _log;
@@ -15,35 +17,41 @@ public class SearchService : ISearchService
     public SearchService(ILogger<SearchService> log, IGeoClient geoClient, IRateClient rateClient)
     {
         _log = log;
-        _geoClient = geoClient;
-        _rateClient = rateClient;
+        _geoClient = geoClient ?? throw new NullReferenceException("Geo client was not specified. You need to do that before you proceed");
+        _rateClient = rateClient ?? throw new NullReferenceException("Rate client was not specified. You need to do that before you proceed");;
     }
 
-    public async Task<SearchResult> Nearby(NearbyRequest request)
+    public async Task<SearchResult?> Nearby(NearbyRequest request)
     {
-        _log.LogInformation("Search service called with parameters: {Request}", request);
-
         try
         {
+#if DEBUG
+            _log.LogInformation("Search service called with parameters: {Request}", request);
+            _log.LogInformation("Trying to call Geo service...");
+#endif
+
             var nearbyHotels = await _geoClient.GetNearbyHotelsAsync(new GeoRequest()
             {
                 Lat = request.Lat,
                 Lon = request.Lon
-            }) ;//?? throw new RpcException(new Status(StatusCode.Internal,
-                //"Profile gRPC service failed to respond in time or the response was null"));
-
+            });
+            
+#if DEBUG
             _log.LogInformation("Successfully retrieved data from Geo Service");
+            _log.LogInformation("Trying to call Geo service...");
+#endif
 
             var hotelRates = await _rateClient.GetRatesAsync(new RateRequest()
             {
-                HotelIds =  nearbyHotels?.HotelIds ,
+                HotelIds = nearbyHotels?.HotelIds,
                 InDate = request.InDate,
                 OutDate = request.OutDate
-            }); //?? throw new RpcException(new Status(StatusCode.Internal,
-               // "Profile gRPC service failed to respond in time or the response was null"));
-
+            }); 
+            
+#if DEBUG
             _log.LogInformation("Successfully retrieved data from Rates Service");
-
+#endif
+            
             return new SearchResult()
             {
                 HotelIds = hotelRates.RatePlans.Select(x => x.HotelId)
@@ -51,8 +59,8 @@ public class SearchService : ISearchService
         }
         catch (Exception e)
         {
-            _log.LogError("One of gRPC services returned null: {Exception}", e);
-            return null!;
+            _log.LogError("Invalid response code or parameters: {Exception}", e);
+            return null;
         }
     }
 }

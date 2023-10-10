@@ -25,7 +25,7 @@ public class RateClient : IRateClient
         var jsonPayload = JsonConvert.SerializeObject(request);
 
         var httpContent = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync("rates", httpContent);
+        var response = await _httpClient.PostAsync($"{_httpClient.BaseAddress}rate/rates", httpContent);
 
         response.EnsureSuccessStatusCode();
 

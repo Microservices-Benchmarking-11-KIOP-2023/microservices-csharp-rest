@@ -5,7 +5,7 @@ namespace Pb.Rate.Service.Services;
 
 public interface IRateService
 {
-    public Task<RateResult> GetRates(RateRequest request);
+    public RateResult GetRates(RateRequest request);
 }
 public class RateService : IRateService
 {
@@ -18,19 +18,22 @@ public class RateService : IRateService
         _rateTable = InitializeRateTable(ratePlansLoader.RateTable);
     }
 
-    public Task<RateResult> GetRates(RateRequest request)
+    public RateResult GetRates(RateRequest request)
     {
-        var result = new RateResult();
+        var result = new RateResult
+        {
+            RatePlans = new List<RatePlan>()
+        };
 
         foreach (var hotelId in request.HotelIds)
         {
-            var stay = (hotelId, request.InDate, request.OutDate);
+            var stay = (hotelId, request.InDate ?? "", request.OutDate ?? "");
 
             if (_rateTable.TryGetValue(stay, out var ratePlans))
-                result.RatePlans.AddRange(ratePlans);
+                result.RatePlans!.AddRange(ratePlans);
         }
 
-        return Task.FromResult(result);
+        return result;
     }
 
     private IDictionary<(string, string, string), List<RatePlan>> InitializeRateTable(IEnumerable<RatePlan> ratePlans)

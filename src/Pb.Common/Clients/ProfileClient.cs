@@ -24,7 +24,7 @@ public class ProfileClient : IProfileClient
         var jsonPayload = JsonConvert.SerializeObject(request);
 
         var httpContent = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync("profiles", httpContent);
+        var response = await _httpClient.PostAsync($"{_httpClient.BaseAddress}profile/profiles", httpContent);
 
         response.EnsureSuccessStatusCode();
 

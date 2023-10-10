@@ -25,7 +25,7 @@ public class SearchClient : ISearchClient
         var jsonPayload = JsonConvert.SerializeObject(request);
 
         var httpContent = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsJsonAsync("nearby", httpContent);
+        var response = await _httpClient.PostAsync($"{_httpClient.BaseAddress}search/nearby", httpContent);
 
         response.EnsureSuccessStatusCode();
         
