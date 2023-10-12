@@ -1,5 +1,6 @@
 services:
   gateway:
+    image: ghcr.io/microservices-benchmarking-11-kiop-2023/csharp-gateway-rest:latest
     build:
       dockerfile: src/Pb.ApiGateway/Dockerfile
       context: .
@@ -9,6 +10,7 @@ services:
       - search
       - profile
   search:
+    image: ghcr.io/microservices-benchmarking-11-kiop-2023/csharp-search-rest:latest
     build: 
       dockerfile: src/Pb.Search.Service/Dockerfile
       context: .
