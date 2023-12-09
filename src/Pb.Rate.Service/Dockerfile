@@ -11,7 +11,6 @@ COPY . .
 
 RUN apt-get update && apt-get install -y unzip
 RUN unzip src/Pb.Rate.Service/Data/inventory.zip -d src/Pb.Rate.Service/Data
- 
 RUN dotnet restore "src/Pb.Rate.Service/Pb.Rate.Service.csproj"
 
 WORKDIR "/src/src/Pb.Rate.Service"
