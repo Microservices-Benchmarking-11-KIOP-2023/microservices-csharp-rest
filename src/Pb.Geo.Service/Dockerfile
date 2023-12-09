@@ -10,7 +10,7 @@ COPY ["src/Pb.Common", "src/Pb.Common"]
 COPY . .
 
 RUN apt-get update && apt-get install -y unzip
-RUN unzip /src/Pb.Geo.Service/Data/inventory.zip -d /src/Pb.Geo.Service/Data
+RUN unzip /src/Pb.Geo.Service/Data/geo.zip -d /src/Pb.Geo.Service/Data
 RUN dotnet restore "src/Pb.Geo.Service/Pb.Geo.Service.csproj"
 
 WORKDIR "/src/src/Pb.Geo.Service"
