@@ -8,7 +8,7 @@ COPY ["src/Pb.Rate.Service/Pb.Rate.Service.csproj", "src/Pb.Rate.Service/"]
 COPY ["src/Pb.Common", "src/Pb.Common"]
 
 RUN apt-get update && apt-get install -y unzip
-RUN unzip /src/Pb.Rate.Service/data/inventory.zip -d /src/Pb.Rate.Service/data
+RUN unzip /src/Pb.Rate.Service/Data/inventory.zip -d /src/Pb.Rate.Service/Data
  
 RUN dotnet restore "src/Pb.Rate.Service/Pb.Rate.Service.csproj"
 COPY . .

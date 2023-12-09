@@ -8,7 +8,7 @@ COPY ["src/Pb.Geo.Service/Pb.Geo.Service.csproj", "src/Pb.Geo.Service/"]
 COPY ["src/Pb.Common", "src/Pb.Common"]
 
 RUN apt-get update && apt-get install -y unzip
-RUN unzip /src/Pb.Geo.Service/data/inventory.zip -d /src/Pb.Geo.Service/data
+RUN unzip /src/Pb.Geo.Service/Data/inventory.zip -d /src/Pb.Geo.Service/Data
 
 RUN dotnet restore "src/Pb.Geo.Service/Pb.Geo.Service.csproj"
 COPY . .
