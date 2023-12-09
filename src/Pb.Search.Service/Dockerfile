@@ -7,6 +7,7 @@ WORKDIR /src
 COPY ["src/Pb.Search.Service/Pb.Search.Service.csproj", "src/Pb.Search.Service/"]
 COPY ["src/Pb.Common", "src/Pb.Common"]
 RUN dotnet restore "src/Pb.Search.Service/Pb.Search.Service.csproj"
+
 COPY . .
 WORKDIR "/src/src/Pb.Search.Service"
 RUN dotnet build "Pb.Search.Service.csproj" -c Release -o /app/build

@@ -6,6 +6,10 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["src/Pb.Profile.Service/Pb.Profile.Service.csproj", "src/Pb.Profile.Service/"]
 COPY ["src/Pb.Common", "src/Pb.Common"]
+
+RUN apt-get update && apt-get install -y unzip
+RUN unzip /src/Pb.Profile.Service/Data/hotels.zip -d /src/Pb.Profile.Service/Data
+
 RUN dotnet restore "src/Pb.Profile.Service/Pb.Profile.Service.csproj"
 COPY . .
 WORKDIR "/src/src/Pb.Profile.Service"

@@ -6,6 +6,10 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["src/Pb.Rate.Service/Pb.Rate.Service.csproj", "src/Pb.Rate.Service/"]
 COPY ["src/Pb.Common", "src/Pb.Common"]
+
+RUN apt-get update && apt-get install -y unzip
+RUN unzip /src/Pb.Rate.Service/data/inventory.zip -d /src/Pb.Rate.Service/data
+ 
 RUN dotnet restore "src/Pb.Rate.Service/Pb.Rate.Service.csproj"
 COPY . .
 WORKDIR "/src/src/Pb.Rate.Service"
