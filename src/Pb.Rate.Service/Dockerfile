@@ -7,11 +7,13 @@ WORKDIR /src
 COPY ["src/Pb.Rate.Service/Pb.Rate.Service.csproj", "src/Pb.Rate.Service/"]
 COPY ["src/Pb.Common", "src/Pb.Common"]
 
+COPY . .
+
 RUN apt-get update && apt-get install -y unzip
-RUN unzip /src/Pb.Rate.Service/Data/inventory.zip -d /src/Pb.Rate.Service/Data
+RUN unzip src/Pb.Rate.Service/Data/inventory.zip -d src/Pb.Rate.Service/Data
  
 RUN dotnet restore "src/Pb.Rate.Service/Pb.Rate.Service.csproj"
-COPY . .
+
 WORKDIR "/src/src/Pb.Rate.Service"
 RUN dotnet build "Pb.Rate.Service.csproj" -c Release -o /app/build
 
