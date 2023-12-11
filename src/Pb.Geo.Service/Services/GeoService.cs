@@ -39,7 +39,7 @@ public class GeoService : IGeoService
     {
         return points
             .Select(p => new { Point = p, Distance = CalculateDistanceBetweenPoints(point, p) })
-            .Where(pointAndDistance => pointAndDistance.Distance <= Math.Pow(MaxSearchRadius, 2))
+            .Where(pointAndDistance => pointAndDistance.Distance <= MaxSearchRadius)
             .OrderBy(pointAndDistance => pointAndDistance.Distance)
             .Select(pointAndDistance => pointAndDistance.Point);
     }
