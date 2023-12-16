@@ -9,12 +9,10 @@ public interface IRateService
 }
 public class RateService : IRateService
 {
-    private readonly ILogger<RateService> _log;
     private readonly IDictionary<(string, string, string), List<RatePlan>> _rateTable;
 
-    public RateService(ILogger<RateService> logger, IRatePlansLoader ratePlansLoader)
+    public RateService(IRatePlansLoader ratePlansLoader)
     {
-        _log = logger;
         _rateTable = InitializeRateTable(ratePlansLoader.RateTable);
     }
 

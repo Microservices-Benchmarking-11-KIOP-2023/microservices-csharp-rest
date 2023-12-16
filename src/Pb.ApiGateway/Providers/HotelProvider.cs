@@ -28,9 +28,6 @@ public class HotelProvider : IHotelProvider
 
     public async Task<GeoJsonResponse?> FetchHotels(HotelParameters parameters)
     {
-        _log.LogInformation("Checking parameters passed to fetch hotels");
-        if (CheckParameters(parameters)) return null;
-
         try
         {
             var searchResponse = await _searchClient.GetNearbyHotelsAsync(
@@ -42,27 +39,21 @@ public class HotelProvider : IHotelProvider
                     OutDate = parameters.OutDate
                 }) ?? throw new AggregateException();
             
-            _log.LogInformation("Successfully Retrieved nearby hotels from search service"); //Add to gRPC
-
             var profileResponse = await _profileClient.GetProfilesAsync(
                 new ProfileRequest
                 {
                     HotelIds = searchResponse.HotelIds 
                 });
             
-            _log.LogInformation("Successfully Retrieved profiles from profile service"); //Add to gRPC
-            
             var hotels = CreateGeoJsonResponse(profileResponse.Hotels);
             return hotels;
         }
-        catch (AggregateException e) //Add to grpc
+        catch (AggregateException e) 
         {
-            _log.LogError("One of gRPC services responded with Unavailable status code : {Exception}", e);
             return new GeoJsonResponse();
         }
         catch (Exception e)
         {
-            _log.LogError("Unknown exception: {Exception}", e);
             return new GeoJsonResponse();
         }
     }

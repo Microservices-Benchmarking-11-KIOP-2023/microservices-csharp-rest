@@ -9,39 +9,33 @@ public interface IProfileService
 }
 public class ProfileService : IProfileService
 {
-    private readonly ILogger<ProfileService> _log;
     private readonly IDictionary<string?, Hotel> _profiles;
 
     public ProfileService(ILogger<ProfileService> log, IHotelLoader hotelLoader)
     {
-        _log = log;
         _profiles = InitializeProfiles(hotelLoader.Hotels);
     }
 
     public ProfileResult GetProfiles(ProfileRequest request)
     {
-        if (request.HotelIds is null && request?.HotelIds?.Count() == 0)
+        var result = new ProfileResult()
         {
-            _log.LogWarning("Request contained empty sequence of hotelIds, you need to specify them in the request body of POST method");
-            return new ProfileResult();
-        }
-        #if DEBUG
-        _log.LogDebug("Getting profiles for hotels with IDs (first 10 entries): {hotels}", request?.HotelIds?.Take(10));
-        #endif
+            Hotels = new List<Hotel?>()
+        };
 
-        return new ProfileResult()
+        foreach (var hotelId in request.HotelIds)
+        {
+            if (_profiles.TryGetValue(hotelId, out var hotelProfile))
             {
-                Hotels =
-                    _profiles
-                        .Where(p => request.HotelIds.Contains(p.Key))
-                        .Select(p => p.Value)
-            };
+                result.Hotels.Add(hotelProfile);
+            }
+        }
+
+        return result;
     }
 
     private Dictionary<string?, Hotel> InitializeProfiles(IEnumerable<Hotel> hotels)
     {
-        _log.LogInformation("Initializing hotel profiles...");
-        
         var profiles = new Dictionary<string?, Hotel>();
 
         foreach (var hotel in hotels)
